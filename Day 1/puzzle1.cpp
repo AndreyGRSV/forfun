@@ -1,36 +1,44 @@
 /*
-* Puzzle solution for Advent of Code 2025 - Day 1
-*/
+ * Puzzle solution for Advent of Code 2025 - Day 1
+ */
 
 #include "../common/common.h"
 #include <iostream>
+
+namespace {
+constexpr int TRACK_SIZE = 100;
+constexpr int START_POSITION = 50;
+constexpr int MAX_DISTANCE = 1000;
+} // namespace
 
 int main(int argc, char *argv[]) {
   const std::filesystem::path input_file =
       (argc > 1) ? argv[1] : "../Day 1/input";
 
-  auto result = readFileByLine<std::tuple<int,int>>(
-      input_file, [](std::string_view line, std::tuple<int,int> &accumulate) -> bool {
-        static int position = 50; // Start at position 50
+  using ResultType = std::tuple<int, int>; // (zero crossings, total rotations)
+
+  auto result = readFileByLine<ResultType>(
+      input_file, [](std::string_view line, ResultType &accumulate) -> bool {
+        static int position = START_POSITION;
         if (line.empty())
           return true;
 
         char direction = line[0];
         auto [distance, ok] = to_unsigned<unsigned>(line.substr(1));
-        if (!ok || distance > 1000)
+        if (!ok || distance > MAX_DISTANCE)
           return false;
 
-        auto rotations = distance / 100;
-        auto remainder = distance % 100;
+        auto rotations = distance / TRACK_SIZE;
+        auto remainder = distance % TRACK_SIZE;
         auto last_position = position;
         if (direction == 'L') {
-          position = (position - remainder + 100) % 100;
+          position = (position - remainder + TRACK_SIZE) % TRACK_SIZE;
           if ((position > last_position || position == 0) &&
               last_position != 0) {
             rotations++;
           }
         } else if (direction == 'R') {
-          position = (position + remainder) % 100;
+          position = (position + remainder) % TRACK_SIZE;
           if (position < last_position) {
             rotations++;
           }
@@ -43,7 +51,8 @@ int main(int argc, char *argv[]) {
       });
 
   if (result) {
-    std::cout << std::get<0>(*result) << " " << std::get<1>(*result) << std::endl;
+    std::cout << std::get<0>(*result) << " " << std::get<1>(*result)
+              << std::endl;
   } else {
     std::cerr << "Error reading input file." << std::endl;
     return 1;
