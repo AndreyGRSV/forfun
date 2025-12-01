@@ -1,14 +1,14 @@
 #pragma once
 
+#include <charconv>
 #include <concepts>
+#include <expected>
 #include <filesystem>
 #include <fstream>
 #include <functional>
-#include <expected>
 #include <sstream>
 #include <string>
 #include <tuple>
-#include <charconv>
 
 template <typename T>
 concept UnsignedInteger = std::unsigned_integral<T> && !std::same_as<T, bool>;
@@ -17,13 +17,9 @@ template <UnsignedInteger T>
 std::tuple<T, bool> to_unsigned(std::string_view sval) {
   T value{};
   auto result = std::from_chars(sval.data(), sval.data() + sval.size(), value);
-  return {value, result.ec == std::errc{}};
+  return {value, result.ec == std::errc{} &&
+                     (result.ptr == sval.data() + sval.size())};
 }
-
-// template <typename T>
-// concept Additive = requires (T a, T b) {
-//   { a + b } -> std::same_as<T>;
-// };
 
 template <typename ReturnType>
 std::expected<ReturnType, bool> readFileByLine(
