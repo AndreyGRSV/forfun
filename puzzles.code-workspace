@@ -1,0 +1,217 @@
+{
+    "folders": [
+        {
+            "path": ".",
+            "name": "puzzles2025"
+        }
+    ],
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "CMake target (lldb)",
+                "type": "lldb",
+                "request": "launch",
+                "program": "${command:cmake.launchTargetPath}",
+                "args": [
+                    "input"
+                ],
+                "cwd": "${command:cmake.activeFolderPath}",
+            },
+            {
+                "name": "CMake target (gdb)",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "${command:cmake.launchTargetPath}",
+                "args": [
+                    "input"
+                ],
+                "stopAtEntry": false,
+                "cwd": "${command:cmake.activeFolderPath}",
+                "environment": [],
+                "externalConsole": false,
+                "MIMode": "gdb",
+                "setupCommands": [
+                    {
+                        "description": "Включить автоматическое форматирование для gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    }
+                ]
+            }
+        ],
+        "compounds": []
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-vscode.cpptools",
+            "eamodio.gitlens",
+            "ms-vscode.cmake-tools",
+            "go2sh.cmake-integration-vscode",
+            "donjayamanne.githistory",
+            "eamodio.gitlens",
+            "xaver.clang-format",
+            "notskm.clang-tidy",
+            "cschlosser.doxdocgen",
+            "editorconfig.editorconfig",
+            "shardulm94.trailing-spaces",
+            "mrkou47.thrift-syntax-support",
+            "ms-azuretools.vscode-docker",
+            "ms-vscode.cmake-tools",
+            "jeff-hykin.better-cpp-syntax",
+            "streetsidesoftware.code-spell-checker",
+            "vadimcn.vscode-lldb"
+        ]
+    },
+    "settings": {
+        "C_Cpp.default.configurationProvider": "go2sh.cmake-integration",
+        "files.associations": {
+            "*.cppm": "cpp",
+            "*.h": "cpp",
+            "iostream": "cpp",
+            "utility": "cpp",
+            "type_traits": "cpp",
+            "chrono": "cpp",
+            "coroutine": "cpp",
+            "future": "cpp",
+            "condition_variable": "cpp",
+            "mutex": "cpp",
+            "array": "cpp",
+            "atomic": "cpp",
+            "hash_map": "cpp",
+            "bit": "cpp",
+            "*.tcc": "cpp",
+            "cctype": "cpp",
+            "clocale": "cpp",
+            "cmath": "cpp",
+            "compare": "cpp",
+            "concepts": "cpp",
+            "cstddef": "cpp",
+            "cstdint": "cpp",
+            "cstdio": "cpp",
+            "cstdlib": "cpp",
+            "cwchar": "cpp",
+            "cwctype": "cpp",
+            "deque": "cpp",
+            "list": "cpp",
+            "map": "cpp",
+            "unordered_map": "cpp",
+            "vector": "cpp",
+            "exception": "cpp",
+            "algorithm": "cpp",
+            "functional": "cpp",
+            "iterator": "cpp",
+            "memory": "cpp",
+            "memory_resource": "cpp",
+            "numeric": "cpp",
+            "optional": "cpp",
+            "random": "cpp",
+            "string": "cpp",
+            "string_view": "cpp",
+            "system_error": "cpp",
+            "tuple": "cpp",
+            "initializer_list": "cpp",
+            "iosfwd": "cpp",
+            "istream": "cpp",
+            "limits": "cpp",
+            "new": "cpp",
+            "ostream": "cpp",
+            "ranges": "cpp",
+            "sstream": "cpp",
+            "stdexcept": "cpp",
+            "streambuf": "cpp",
+            "typeinfo": "cpp",
+            "cstdarg": "cpp",
+            "ctime": "cpp",
+            "ratio": "cpp",
+            "stop_token": "cpp",
+            "thread": "cpp",
+            "queue": "cpp",
+            "cstring": "cpp",
+            "bitset": "cpp",
+            "__assert": "cpp",
+            "__bits": "cpp",
+            "__config": "cpp",
+            "__debug": "cpp",
+            "__locale": "cpp",
+            "__mutex_base": "cpp",
+            "__threading_support": "cpp",
+            "__tuple": "cpp",
+            "ios": "cpp",
+            "locale": "cpp",
+            "latch": "cpp",
+            "__errc": "cpp",
+            "__hash_table": "cpp",
+            "__node_handle": "cpp",
+            "fstream": "cpp",
+            "filesystem": "cpp",
+            "__bit_reference": "cpp",
+            "__split_buffer": "cpp",
+            "stack": "cpp",
+            "xlocale": "cpp",
+            "regex": "cpp",
+            "charconv": "cpp",
+            "cinttypes": "cpp",
+            "codecvt": "cpp",
+            "complex": "cpp",
+            "format": "cpp",
+            "forward_list": "cpp",
+            "iomanip": "cpp",
+            "numbers": "cpp",
+            "semaphore": "cpp",
+            "set": "cpp",
+            "span": "cpp",
+            "xfacet": "cpp",
+            "xhash": "cpp",
+            "xiosbase": "cpp",
+            "xlocbuf": "cpp",
+            "xlocinfo": "cpp",
+            "xlocmes": "cpp",
+            "xlocmon": "cpp",
+            "xlocnum": "cpp",
+            "xloctime": "cpp",
+            "xmemory": "cpp",
+            "xstring": "cpp",
+            "xtr1common": "cpp",
+            "xtree": "cpp",
+            "xutility": "cpp"
+        },
+        "cmake.buildEnvironment": {
+            "VERBOSE": "1"
+        },
+        "cmake.generator": "Ninja",
+        "clang-format.executable": "clang-format",
+        "clang-tidy.executable": "clang-tidy",
+        "clang-tidy.buildPath": "build",
+        "clang-tidy.compilerArgs": [
+            "-std=c++26",
+            "-Wall",
+            "-Wextra",
+            "-pedantic"
+        ],
+        "cmake.configureArgs": [
+            "-DCMAKE_CXX_STANDARD=26",
+            "-DCMAKE_CXX_STANDARD_REQUIRED=ON"
+        ],
+        "cmake.sourceDirectory": "${workspaceFolder}",
+        "cmake.buildDirectory": "${workspaceFolder}/build",
+        "cmake.configureOnOpen": true,
+        "files.exclude": {
+            "**/build": true
+        },
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll.clang-tidy": "explicit"
+        },
+        "C_Cpp.clang_format_fallbackStyle": "Google",
+        "C_Cpp.clang_format_style": "file",
+        "C_Cpp.intelliSenseEngine": "Default",
+        "C_Cpp.default.includePath": [
+            "${workspaceFolder}/**"
+        ],
+        "C_Cpp.default.defines": [],
+        "C_Cpp.default.compilerPath": "/usr/bin/clang++",
+        "C_Cpp.default.cStandard": "c23",
+        "C_Cpp.default.cppStandard": "c++26"
+    }
+}

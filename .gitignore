@@ -1,0 +1,5 @@
+build/**
+.vscode/browse.vc.db
+.vscode/browse.vc.db-shm
+/out/**
+/.vs
