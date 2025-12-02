@@ -1,6 +1,7 @@
 #include "../common/common.h"
 #include <algorithm>
 #include <iostream>
+#include <regex>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -51,14 +52,17 @@ int main(int argc, char *argv[]) {
   using ResultType = std::tuple<uint64_t, uint64_t>;
   auto result = readFileByLine<ResultType>(
       input_file, [](std::string_view line, ResultType &accum) -> bool {
-        std::stringstream ss(line.data());
-        std::string token;
-        while (std::getline(ss, token, ',')) {
-          size_t dash = token.find('-');
-          if (dash == std::string::npos)
-            return false;
-          auto [first, ok1] = to_unsigned<uint64_t>(token.substr(0, dash));
-          auto [last, ok2] = to_unsigned<uint64_t>(token.substr(dash + 1));
+        std::regex pattern(R"((\s*\d+\s*)-(\s*\d+\s*))");
+        auto it = std::cregex_iterator(line.begin(), line.end(), pattern);
+        auto end = std::cregex_iterator();
+        if (it == end) {
+          return false;
+        }
+        for (; it != end; ++it) {
+          auto& match = *it;
+
+          auto [first, ok1] = to_unsigned<uint64_t>(match[1].str());
+          auto [last, ok2] = to_unsigned<uint64_t>(match[2].str());
           if (ok1 && ok2) {
             for (auto id = first; id <= last; ++id) {
               if (is_invalid(id)) {
