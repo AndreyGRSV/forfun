@@ -1,10 +1,6 @@
 #include "../common/common.h"
-#include <algorithm>
 #include <iostream>
 #include <regex>
-#include <sstream>
-#include <string>
-#include <vector>
 
 bool is_invalid(uint64_t id) {
   std::string s = std::to_string(id);
