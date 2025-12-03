@@ -53,13 +53,14 @@ int main(int argc, char *argv[]) {
   auto result = readFileByLine<ResultType>(
       input_file, [](std::string_view line, ResultType &accum) -> bool {
         std::regex pattern(R"((\s*\d+\s*)-(\s*\d+\s*))");
-        auto it = std::cregex_iterator(line.begin(), line.end(), pattern);
+        auto it = std::cregex_iterator(&line.data()[0],
+                                       &line.data()[0] + line.size(), pattern);
         auto end = std::cregex_iterator();
         if (it == end) {
           return false;
         }
         for (; it != end; ++it) {
-          auto& match = *it;
+          auto &match = *it;
 
           auto [first, ok1] = to_unsigned<uint64_t>(match[1].str());
           auto [last, ok2] = to_unsigned<uint64_t>(match[2].str());
