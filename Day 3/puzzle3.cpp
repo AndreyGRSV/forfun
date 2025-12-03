@@ -1,9 +1,6 @@
 #include "../common/common.h"
-#include <algorithm>
 #include <iostream>
-#include <stack>
 #include <string>
-#include <vector>
 
 using MaxPositionData = std::tuple<int, int>;
 MaxPositionData get_max_from(int pos, std::string_view bank, size_t max) {
