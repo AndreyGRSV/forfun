@@ -2,12 +2,31 @@
 #include <iostream>
 #include <regex>
 
+// Simple variant using string conversion
+// Check if a number is invalid (pattern repeated in the two halves)
 bool is_invalid(uint64_t id) {
   std::string s = std::to_string(id);
   if (s.size() % 2 != 0)
     return false;
   size_t half = s.size() / 2;
   return s.substr(0, half) == s.substr(half);
+}
+
+// Without string conversion
+// Check if a number is valid (no digit repeated in corresponding positions)
+// Example: 1234 is valid, 1212 is invalid (12 repeated), 123123 is invalid
+// TODO: Try to optimize with constevaluation and folding
+constexpr auto DIGITS_STEP = 100;
+constexpr auto DIVID_STEP = 10;
+
+bool is_valid(uint64_t id, uint64_t max = DIGITS_STEP,
+              uint64_t min = DIVID_STEP, uint64_t divider = DIVID_STEP) {
+  if (divider > max)
+    return true;
+  if (id < max && id >= min)
+    return id / divider != id % divider;
+  return is_valid(id, max * DIGITS_STEP, min * DIGITS_STEP,
+                  divider * DIVID_STEP);
 }
 
 // Check if a number is invalid (pattern repeated at least twice)
@@ -62,7 +81,7 @@ int main(int argc, char *argv[]) {
           auto [last, ok2] = to_unsigned<uint64_t>(match[2].str());
           if (ok1 && ok2) {
             for (auto id = first; id <= last; ++id) {
-              if (is_invalid(id)) {
+              if (!is_valid(id)) {
                 std::get<0>(accum) += id;
               }
               if (is_invalid2(id)) {
