@@ -30,12 +30,14 @@ uint64_t get_max_joltage(std::string_view bank, int max_digits = 12) {
 }
 
 int main(int argc, char *argv[]) {
+  namespace pc = puzzles::common;
+
   const std::filesystem::path input_file =
       (argc > 1) ? argv[1] : "../Day 3/input";
 
   using ResultType = std::tuple<uint64_t, uint64_t>;
 
-  auto result = readFileByLine<ResultType>(
+  auto result = pc::readFileByLine<ResultType>(
       input_file, [](std::string_view line, ResultType &accum) -> bool {
         std::get<0>(accum) += get_max_joltage(line, 2);
         std::get<1>(accum) += get_max_joltage(line, 12);

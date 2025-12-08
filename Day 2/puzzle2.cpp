@@ -61,11 +61,14 @@ bool is_invalid2(uint64_t id) {
 }
 
 int main(int argc, char *argv[]) {
+
+  namespace pc = puzzles::common;
+
   const std::filesystem::path input_file =
       (argc > 1) ? argv[1] : "../Day 2/input";
 
   using ResultType = std::tuple<uint64_t, uint64_t>;
-  auto result = readFileByLine<ResultType>(
+  auto result = pc::readFileByLine<ResultType>(
       input_file, [](std::string_view line, ResultType &accum) -> bool {
         std::regex pattern(R"((\s*\d+\s*)-(\s*\d+\s*))");
         auto it = std::cregex_iterator(&line.data()[0],
@@ -77,10 +80,10 @@ int main(int argc, char *argv[]) {
         for (; it != end; ++it) {
           auto &match = *it;
 
-          auto [first, ok1] = to_unsigned<uint64_t>(match[1].str());
-          auto [last, ok2] = to_unsigned<uint64_t>(match[2].str());
-          if (ok1 && ok2) {
-            for (auto id = first; id <= last; ++id) {
+          auto first = pc::to_unsigned<uint64_t>(match[1].str());
+          auto last = pc::to_unsigned<uint64_t>(match[2].str());
+          if (first && last) {
+            for (auto id = *first; id <= *last; ++id) {
               if (!is_valid(id)) {
                 std::get<0>(accum) += id;
               }

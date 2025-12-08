@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+namespace pc = puzzles::common;
 struct Range {
   uint64_t start;
   uint64_t end;
@@ -43,18 +44,18 @@ std::expected<Range, std::string_view> parseLine(std::string_view line) {
     return std::unexpected(std::format("Invalid range format: {}", line));
   }
 
-  auto [start, ok1] = to_unsigned<uint64_t>(line.substr(0, dash_pos));
-  auto [end, ok2] = to_unsigned<uint64_t>(line.substr(dash_pos + 1));
+  auto start = pc::to_unsigned<uint64_t>(line.substr(0, dash_pos));
+  auto end = pc::to_unsigned<uint64_t>(line.substr(dash_pos + 1));
 
-  if (!ok1 || !ok2) {
+  if (!start || !end) {
     return std::unexpected(std::format("Error parsing range: {}", line));
   }
 
-  if (start > end) {
+  if (*start > *end) {
     return std::unexpected(
         std::format("Invalid range (start > end): {}", line));
   }
-  return Range{start, end};
+  return Range{*start, *end};
 }
 
 auto mergeRanges(std::vector<Range> ranges) -> std::vector<Range> {
@@ -98,7 +99,7 @@ int main(int argc, char *argv[]) {
   enum class ReadState { Ranges, IDs };
   ReadState state = ReadState::Ranges;
 
-  auto result = readFileByLine<RangesType>(
+  auto result = pc::readFileByLine<RangesType>(
       input_file,
       [&available_ids, &state](std::string_view line, RangesType &accumulate) {
         if (line.empty()) {
@@ -107,12 +108,12 @@ int main(int argc, char *argv[]) {
           return true;
         }
         if (state == ReadState::IDs) {
-          auto [id, ok] = to_unsigned<uint64_t>(line);
-          if (!ok) {
+          auto id = pc::to_unsigned<uint64_t>(line);
+          if (!id) {
             std::println(stderr, "Error parsing ID: {}", line);
             return false;
           }
-          available_ids.push_back(id);
+          available_ids.push_back(*id);
           return true;
         } else {
           auto parse_result = parseLine(line);

@@ -4,9 +4,10 @@
 #include <vector>
 
 int main(int argc, char *argv[]) {
+  namespace pc = puzzles::common;
   const std::string input_file = (argc > 1) ? argv[1] : "../Day 4/input";
 
-  auto result = readFileByLine<std::vector<std::string>>(
+  auto result = pc::readFileByLine<std::vector<std::string>>(
       input_file,
       [](std::string_view line, std::vector<std::string> &accumulate) {
         accumulate.push_back(std::string(line));

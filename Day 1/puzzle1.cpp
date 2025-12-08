@@ -12,24 +12,27 @@ constexpr int MAX_DISTANCE = 1000;
 } // namespace
 
 int main(int argc, char *argv[]) {
+
+  namespace pc = puzzles::common;
+
   const std::filesystem::path input_file =
       (argc > 1) ? argv[1] : "../Day 1/input";
 
   using ResultType = std::tuple<int, int>; // (zero crossings, total rotations)
 
-  auto result = readFileByLine<ResultType>(
+  auto result = pc::readFileByLine<ResultType>(
       input_file, [](std::string_view line, ResultType &accumulate) -> bool {
         static int position = START_POSITION;
         if (line.empty())
           return true;
 
         char direction = line[0];
-        auto [distance, ok] = to_unsigned<unsigned>(line.substr(1));
-        if (!ok || distance > MAX_DISTANCE)
+        auto distance = pc::to_unsigned<unsigned>(line.substr(1));
+        if (!distance || *distance > MAX_DISTANCE)
           return false;
 
-        auto rotations = distance / TRACK_SIZE;
-        auto remainder = distance % TRACK_SIZE;
+        auto rotations = *distance / TRACK_SIZE;
+        auto remainder = *distance % TRACK_SIZE;
         auto last_position = position;
         if (direction == 'L') {
           position = (position - remainder + TRACK_SIZE) % TRACK_SIZE;

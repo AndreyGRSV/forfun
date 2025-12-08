@@ -10,15 +10,19 @@
 #include <string>
 #include <tuple>
 
+namespace puzzles::common {
 template <typename T>
 concept UnsignedInteger = std::unsigned_integral<T> && !std::same_as<T, bool>;
 
 template <UnsignedInteger T>
-std::tuple<T, bool> to_unsigned(std::string_view sval) {
+constexpr std::expected<T, std::errc> to_unsigned(std::string_view sval) {
   T value{};
   auto result = std::from_chars(sval.data(), sval.data() + sval.size(), value);
-  return {value, result.ec == std::errc{} &&
-                     (result.ptr == sval.data() + sval.size())};
+  if (result.ec != std::errc{} || result.ptr != sval.data() + sval.size()) {
+    return std::unexpected(
+        result.ec == std::errc{} ? std::errc::invalid_argument : result.ec);
+  }
+  return value;
 }
 
 template <typename ReturnType>
@@ -42,3 +46,4 @@ std::expected<ReturnType, bool> readFileByLine(
   }
   return std::unexpected(false);
 }
+} // namespace puzzles::common
