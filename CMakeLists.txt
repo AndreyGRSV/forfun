@@ -22,6 +22,8 @@ add_executable(puzzle4 "Day 4/puzzle4.cpp" ${COMMON_HEADERS})
 add_executable(puzzle5 "Day 5/puzzle5.cpp" ${COMMON_HEADERS})
 add_executable(puzzle6 "Day 6/puzzle6.cpp" ${COMMON_HEADERS})
 add_executable(puzzle6_2 "Day 6/puzzle6_2.cpp" ${COMMON_HEADERS})
+add_executable(puzzle7 "Day 7/puzzle7.cpp" ${COMMON_HEADERS})
+
 
 target_compile_definitions(puzzle1 PRIVATE INPUT_FILE="${CMAKE_SOURCE_DIR}/Day 1/input")
 target_compile_definitions(puzzle2 PRIVATE INPUT_FILE="${CMAKE_SOURCE_DIR}/Day 2/input")
@@ -30,3 +32,4 @@ target_compile_definitions(puzzle4 PRIVATE INPUT_FILE="${CMAKE_SOURCE_DIR}/Day 4
 target_compile_definitions(puzzle5 PRIVATE INPUT_FILE="${CMAKE_SOURCE_DIR}/Day 5/input")
 target_compile_definitions(puzzle6 PRIVATE INPUT_FILE="${CMAKE_SOURCE_DIR}/Day 6/input")
 target_compile_definitions(puzzle6_2 PRIVATE INPUT_FILE="${CMAKE_SOURCE_DIR}/Day 6/input")
+target_compile_definitions(puzzle7 PRIVATE INPUT_FILE="${CMAKE_SOURCE_DIR}/Day 7/input")
