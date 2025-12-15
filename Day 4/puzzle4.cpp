@@ -1,3 +1,11 @@
+/*
+ * Puzzle solution for Advent of Code 2025 - Day 4
+ * " Day 4: Printing Department"
+ * Problem: Playground - Roller Coaster Accessibility
+ * Determine accessible roller coasters in a grid layout
+ * based on adjacent roll counts.
+ * Expected output: 1411 8557
+ */
 #include "../common/common.h"
 #include <iostream>
 #include <string>
@@ -5,7 +13,8 @@
 
 int main(int argc, char *argv[]) {
   namespace pc = puzzles::common;
-  const std::string input_file = (argc > 1) ? argv[1] : "../Day 4/input";
+  const std::filesystem::path input_file =
+      (argc > 1) ? argv[1] : "../Day 4/input";
 
   auto result = pc::readFileByLine<std::vector<std::string>>(
       input_file,
@@ -15,7 +24,7 @@ int main(int argc, char *argv[]) {
       });
 
   if (!result) {
-    std::cerr << "Error reading file" << std::endl;
+    std::cerr << pc::InputFileError << std::endl;
     return 1;
   }
 

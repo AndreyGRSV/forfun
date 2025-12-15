@@ -46,4 +46,7 @@ std::expected<ReturnType, bool> readFileByLine(
   }
   return std::unexpected(false);
 }
+
+constexpr auto InputFileError = "Error reading input file.";
+
 } // namespace puzzles::common

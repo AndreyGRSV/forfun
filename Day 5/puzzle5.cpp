@@ -1,3 +1,11 @@
+/*
+ * Puzzle solution for Advent of Code 2025 - Day 5
+ * "Day 5: Cafeteria"
+ * Problem: Playground - Fresh Ingredient Ranges
+ * Determine how many available ingredient IDs fall within given fresh ranges,
+ * and the total count of fresh ingredient IDs after merging overlapping ranges.
+ * Expected output: 529 344260049617193
+ */
 #include "../common/common.h"
 #include <expected>
 #include <print>
@@ -89,7 +97,8 @@ auto countFreshIngredients(const std::vector<Range> &ranges) -> uint64_t {
 }
 
 int main(int argc, char *argv[]) {
-  const std::string input_file = (argc > 1) ? argv[1] : "../Day 5/input";
+  const std::filesystem::path input_file =
+      (argc > 1) ? argv[1] : "../Day 5/input";
 
   using RangesType = std::vector<Range>;
   using IDsType = std::vector<uint64_t>;
@@ -127,7 +136,7 @@ int main(int argc, char *argv[]) {
       });
 
   if (!result) {
-    std::println(stderr, "Error reading file {}", input_file);
+    std::println(stderr, "Error reading file {}", input_file.string());
     return 1;
   }
 

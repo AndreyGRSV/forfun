@@ -1,3 +1,11 @@
+/*
+ * Puzzle solution for Advent of Code 2025 - Day 2
+ * "Day 2: Gift Shop"
+ * Problem: Playground - ID Number Validation
+ * Validate ID numbers based on specific digit patterns.
+ * Expected output: 12850231731 24774350322
+ */
+
 #include "../common/common.h"
 #include <iostream>
 #include <regex>
@@ -99,7 +107,7 @@ int main(int argc, char *argv[]) {
       });
 
   if (!result) {
-    std::cerr << "Error reading file" << std::endl;
+    std::cerr << pc::InputFileError << std::endl;
     return 1;
   }
   std::cout << std::get<0>(*result) << " " << std::get<1>(*result) << std::endl;

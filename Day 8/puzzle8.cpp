@@ -1,9 +1,11 @@
 /*
  * Puzzle solution for Advent of Code 2025 - Day 8
+ * "Day 8: Playground"
  * Problem: Playground - Junction Box Circuits
  *
  * Connect junction boxes in 3D space by shortest distances.
  * Use Union-Find to track circuits and find the product of the three largest.
+ * Expected output: 122430 8135565324
  */
 
 #include "../common/common.h"
@@ -33,11 +35,11 @@ struct Edge {
 // Union-Find (Disjoint Set Union) data structure
 class UnionFind {
 private:
-  std::vector<int> parent;
-  std::vector<int> size;
-  int num_components;
+  std::vector<size_t> parent;
+  std::vector<size_t> size;
+  size_t num_components;
 
-  int find(int x) {
+  size_t find(size_t x) {
     if (parent[x] != x) {
       parent[x] = find(parent[x]); // Path compression
     }
@@ -81,7 +83,7 @@ public:
 
   std::vector<int> getAllSizes() {
     std::vector<int> result;
-    for (int i = 0; i < parent.size(); i++) {
+    for (size_t i = 0; i < parent.size(); i++) {
       if (find(i) == i) { // Root of a component
         result.push_back(size[i]);
       }
@@ -102,13 +104,14 @@ double calculateDistance(const Point3D &a, const Point3D &b) {
 }
 
 int main(int argc, char *argv[]) {
+  namespace cp = puzzles::common;
   const std::filesystem::path input_file{(argc > 1) ? argv[1]
                                                     : "../Day 8/input"};
   const int TARGET_CONNECTIONS = (argc > 2) ? std::stoi(argv[2]) : 1000;
 
   // Read junction box positions
   using ResultType = std::vector<Point3D>;
-  auto result_boxes = puzzles::common::readFileByLine<ResultType>(
+  auto result_boxes = cp::readFileByLine<ResultType>(
       input_file, [](std::string_view line, ResultType &boxes) -> bool {
         if (line.empty())
           return false;
@@ -124,7 +127,7 @@ int main(int argc, char *argv[]) {
       });
 
   if (!result_boxes) {
-    std::println(stderr, "Error reading input file");
+    std::println(stderr, cp::InputFileError);
     return 1;
   }
 

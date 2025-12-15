@@ -1,3 +1,10 @@
+/*
+ * Puzzle solution for Advent of Code 2025 - Day 6 Part 2
+ * "Day 6: Trash Compactor"
+ * Problem: Playground - Vertical Digit Operations
+ * Perform operations on groups of vertical digits extracted from input numbers.
+ * Expected output: 7996218225744
+ */
 #include "../common/common.h"
 #include <algorithm>
 #include <fstream>

@@ -1,3 +1,10 @@
+/*
+ * Puzzle solution for Advent of Code 2025 - Day 3
+ * Problem: Playground - Maximum Joltage from Digit Banks
+ * Calculate maximum joltage values from digit banks
+ * using different digit lengths.
+ * Expected output: 16858 167549941654721
+ */
 #include "../common/common.h"
 #include <iostream>
 #include <string>
@@ -45,7 +52,7 @@ int main(int argc, char *argv[]) {
       });
 
   if (!result) {
-    std::cerr << "Error reading file" << std::endl;
+    std::cerr << pc::InputFileError << std::endl;
     return 1;
   }
   std::cout << std::get<0>(*result) << " " << std::get<1>(*result) << std::endl;

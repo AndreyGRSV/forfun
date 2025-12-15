@@ -1,5 +1,10 @@
 /*
  * Puzzle solution for Advent of Code 2025 - Day 1
+ * "Secret Entrance"
+ * Problem: Playground - Circular Track Navigation
+ * Navigate a circular track based on input commands,
+ * counting zero crossings and total rotations.
+ * Expected output: 1026 5923
  */
 
 #include "../common/common.h"
@@ -57,7 +62,7 @@ int main(int argc, char *argv[]) {
     std::cout << std::get<0>(*result) << " " << std::get<1>(*result)
               << std::endl;
   } else {
-    std::cerr << "Error reading input file." << std::endl;
+    std::cerr << pc::InputFileError << std::endl;
     return 1;
   }
 

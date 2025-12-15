@@ -1,5 +1,6 @@
 /*
  * Puzzle solution for Advent of Code 2025 - Day 7
+ * "Day 7: Laboratories"
  * Problem: Tachyon Manifold Beam Splitting
  *
  * A tachyon beam enters at 'S' and moves downward.
@@ -7,6 +8,7 @@
  * that start from the immediate left and right of the splitter
  * and continue moving downward.
  * Count the total number of times the beam is split.
+ * Expected output: 1602 135656430050438
  */
 
 #include "../common/common.h"
