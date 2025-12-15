@@ -7,10 +7,12 @@
  * Expected output: 529 344260049617193
  */
 #include "../common/common.h"
+#include <algorithm>
 #include <expected>
 #include <print>
 #include <ranges>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace pc = puzzles::common;

@@ -7,6 +7,7 @@
  */
 #include <algorithm>
 #include <charconv>
+#include <cmath>
 #include <cstdint>
 #include <expected>
 #include <fstream>
