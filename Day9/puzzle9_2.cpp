@@ -88,6 +88,7 @@ bool isInsidePolygon1(const Point &p, const std::vector<Point> &polygon) {
 }
 
 int main(int argc, char *argv[]) {
+  namespace pc = puzzles::common;
   const std::filesystem::path input_file{
       (argc > 1) ? argv[1] : "../../Day9/test_input.txt"};
   const int START_POSITION = (argc > 2) ? std::stoi(argv[2]) : 0;
@@ -100,7 +101,7 @@ int main(int argc, char *argv[]) {
 
   // Read red tile positions
   using ResultType = std::vector<Point>;
-  auto result_tiles = puzzles::common::readFileByLine<ResultType>(
+  auto result_tiles = pc::readFileByLine<ResultType>(
       input_file, [](std::string_view line, ResultType &tiles) -> bool {
         if (line.empty())
           return true;
