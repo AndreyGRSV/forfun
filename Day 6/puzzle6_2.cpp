@@ -7,33 +7,32 @@
  */
 #include "../common/common.h"
 #include <algorithm>
-#include <fstream>
-#include <iostream>
 #include <print>
 #include <ranges>
 #include <regex>
-#include <string>
 #include <vector>
 
-int main() {
+int main(int argc, char *argv[]) {
   using namespace std;
 
-  ifstream input("../Day 6/input");
-  if (!input.is_open()) {
-    cerr << "Error opening input file" << endl;
+  const std::filesystem::path input_file =
+      (argc > 1) ? argv[1] : "../Day 6/input";
+
+  auto result = puzzles::common::readFileByLine<std::vector<std::string>>(
+      input_file,
+      [](std::string_view line, std::vector<std::string> &accumulate) {
+        accumulate.push_back(std::string(line));
+        return true;
+      });
+
+  if (!result) {
+    std::println(stderr, puzzles::common::InputFileError);
     return 1;
   }
 
-  // Required full read file for correct processing
-  vector<string> lines;
-  string line;
-  while (getline(input, line)) {
-    lines.push_back(line);
-  }
-  input.close();
-
+  const auto &lines = *result;
   if (lines.size() < 2) {
-    cerr << "Not enough lines in input" << endl;
+    std::println(stderr, "Not enough lines in input");
     return 1;
   }
 
@@ -41,7 +40,7 @@ int main() {
   size_t maxLen = ranges::max(
       lines | views::transform([](const string &s) { return s.length(); }));
 
-  for (auto &l : lines) {
+  for (auto &l : *result) {
     l.resize(maxLen, ' ');
   }
 

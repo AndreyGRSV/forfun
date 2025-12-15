@@ -9,6 +9,7 @@
 
 #include "../common/common.h"
 #include <iostream>
+#include <print>
 
 namespace {
 constexpr int TRACK_SIZE = 100;
@@ -59,10 +60,9 @@ int main(int argc, char *argv[]) {
       });
 
   if (result) {
-    std::cout << std::get<0>(*result) << " " << std::get<1>(*result)
-              << std::endl;
+    std::println("{} {}", std::get<0>(*result), std::get<1>(*result));
   } else {
-    std::cerr << pc::InputFileError << std::endl;
+    std::println(stderr, pc::InputFileError);
     return 1;
   }
 

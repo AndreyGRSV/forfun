@@ -5,64 +5,67 @@
  * Perform operations on groups of vertical digits extracted from input numbers.
  * Expected output: 5784380717354
  */
+#include "../common/common.h"
 #include <algorithm>
-#include <charconv>
 #include <cmath>
 #include <cstdint>
-#include <expected>
-#include <fstream>
-#include <iostream>
-#include <ostream>
 #include <print>
 #include <ranges>
 #include <regex>
-#include <string>
 #include <vector>
 
-int main() {
+int main(int argc, char *argv[]) {
 
-  std::ifstream input("../Day 6/input");
-  if (!input.is_open()) {
-    std::cerr << "Error opening input file" << std::endl;
+  const std::filesystem::path input_file =
+      (argc > 1) ? argv[1] : "../Day 6/input";
+
+  using ResultType = std::vector<std::vector<int>>;
+
+  std::vector<char> o_line{};
+
+  auto result = puzzles::common::readFileByLine<ResultType>(
+      input_file, [&](std::string_view line, ResultType &groups) {
+        // Check if this is the operator line
+        if (line.find('*') != std::string::npos ||
+            line.find('+') != std::string::npos) {
+          // Parse operators
+          std::regex op_pattern{R"([+*])"};
+          for (std::cregex_iterator it(
+                   &line.data()[0], &line.data()[0] + line.size(), op_pattern),
+               end;
+               it != end; ++it) {
+            o_line.push_back((*it).str()[0]);
+          }
+        } else {
+
+          // Parse numbers from current row
+          std::vector<int> current_row{};
+          std::regex number_pattern{R"(\d{1,4})"};
+          for (std::cregex_iterator
+                   it(&line.data()[0], &line.data()[0] + line.size(),
+                      number_pattern),
+               end;
+               it != end; ++it) {
+            current_row.push_back(std::stoll(it->str()));
+          }
+          if (!current_row.empty()) {
+            if (groups.empty())
+              groups.resize(current_row.size());
+            for (const auto [idx, value] :
+                 current_row | std::views::enumerate) {
+              groups[idx].push_back(value);
+            }
+          }
+        }
+        return true;
+      });
+
+  if (!result) {
+    std::println(stderr, puzzles::common::InputFileError);
     return 1;
   }
 
-  // Read all lines from the input
-  std::vector<std::vector<int>> d_groups{};
-  std::vector<char> o_line{};
-  std::string line;
-  std::regex number_pattern{R"(\d{1,4})"};
-
-  // Read all number rows
-  while (getline(input, line)) {
-    // Check if this is the operator line
-    if (line.find('*') != std::string::npos ||
-        line.find('+') != std::string::npos) {
-      // Parse operators
-      std::regex op_pattern{R"([+*])"};
-      for (std::sregex_iterator it(line.begin(), line.end(), op_pattern), end;
-           it != end; ++it) {
-        o_line.push_back((*it).str()[0]);
-      }
-      break; // Stop reading after operator line
-    }
-
-    // Parse numbers from current row
-    std::vector<int> current_row{};
-    for (std::sregex_iterator it(line.begin(), line.end(), number_pattern), end;
-         it != end; ++it) {
-      current_row.push_back(std::stoll(it->str()));
-    }
-    if (!current_row.empty()) {
-      if (d_groups.empty())
-        d_groups.resize(current_row.size());
-      for (const auto [idx, value] : current_row | std::views::enumerate) {
-        d_groups[idx].push_back(value);
-      }
-    }
-  }
-
-  input.close();
+  const auto &d_groups = *result;
 
   auto numberOfDigits10 = [](int value) {
     int number_counter = 0;

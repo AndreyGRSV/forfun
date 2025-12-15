@@ -281,7 +281,7 @@ int main(int argc, char **argv) {
         return true;
       });
   if (!result) {
-    std::println(pc::InputFileError);
+    std::println(stderr, pc::InputFileError);
     return 2;
   }
   const auto &lines = *result;
@@ -344,6 +344,6 @@ int main(int argc, char **argv) {
       ++fit_count;
   }
 
-  std::cout << fit_count << "\n";
+  std::println("{}", fit_count);
   return 0;
 }

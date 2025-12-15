@@ -8,8 +8,13 @@
  */
 #include "../common/common.h"
 #include <iostream>
+#include <print>
 #include <string>
 #include <vector>
+
+namespace {
+constexpr auto CalculationError = "Error calculating accessible rolls.";
+}
 
 int main(int argc, char *argv[]) {
   namespace pc = puzzles::common;
@@ -24,7 +29,7 @@ int main(int argc, char *argv[]) {
       });
 
   if (!result) {
-    std::cerr << pc::InputFileError << std::endl;
+    std::println(stderr, pc::InputFileError);
     return 1;
   }
 
@@ -33,7 +38,7 @@ int main(int argc, char *argv[]) {
       -> std::expected<RemoveList, bool> {
     int rows = grid.size();
     if (rows == 0) {
-      std::cerr << "Empty grid." << std::endl;
+      std::println(stderr, "Empty grid.");
       return std::unexpected(false);
     }
     int cols = grid[0].size();
@@ -69,7 +74,7 @@ int main(int argc, char *argv[]) {
 
   auto to_remove_result = calculate_accessible(*result);
   if (!to_remove_result) {
-    std::cerr << "Error calculating accessible rolls." << std::endl;
+    std::println(stderr, CalculationError);
     return 1;
   }
   int total_accessed = (*to_remove_result).size();
@@ -79,7 +84,7 @@ int main(int argc, char *argv[]) {
   while (true) {
     auto to_remove_result = calculate_accessible(grid_copy);
     if (!to_remove_result) {
-      std::cerr << "Error calculating accessible rolls." << std::endl;
+      std::println(stderr, CalculationError);
       return 1;
     }
     // Remove all accessible rolls
@@ -93,7 +98,6 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  std::cout << total_accessed << " " << total_removed << std::endl;
-
+  std::println("{} {}", total_accessed, total_removed);
   return 0;
 }
