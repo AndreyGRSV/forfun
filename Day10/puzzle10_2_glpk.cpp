@@ -15,6 +15,8 @@
 #include <string>
 #include <vector>
 
+#include "../common/common.h"
+
 struct Machine {
   std::vector<size_t> target_joltage;
   std::vector<std::vector<size_t>> buttons;
@@ -97,6 +99,26 @@ struct GLP {
     }
   }
   operator glp_prob *() const { return lp; }
+
+  void add_rows(size_t n, std::string_view prefix,
+                const std::vector<size_t> &targets, int type = GLP_FX) {
+    glp_add_rows(lp, n);
+    for (size_t i = 0; i < n; ++i) {
+      glp_set_row_name(lp, i + 1, (prefix.data() + std::to_string(i)).c_str());
+      glp_set_row_bnds(lp, i + 1, type, targets[i], targets[i]);
+    }
+  }
+
+  void add_cols(size_t n, std::string_view prefix, int type = GLP_IV,
+                double lb = 0.0, double coef = 1.0) {
+    glp_add_cols(lp, n);
+    for (size_t i = 0; i < n; ++i) {
+      glp_set_col_name(lp, i + 1, (prefix.data() + std::to_string(i)).c_str());
+      glp_set_col_bnds(lp, i + 1, GLP_LO, lb, 0.0); // Lower bound: 0
+      glp_set_col_kind(lp, i + 1, type);            // Integer variable
+      glp_set_obj_coef(lp, i + 1, coef);            // Objective coefficient: 1
+    }
+  }
 };
 
 // Solve using GLPK Integer Linear Programming
@@ -113,34 +135,31 @@ std::expected<size_t, bool> solveMachine(const Machine &machine) {
   glp_set_obj_dir(lp, GLP_MIN); // Minimize
 
   // Add rows (constraints) - one for each counter
-  glp_add_rows(lp, num_counters);
-  for (size_t i = 0; i < num_counters; ++i) {
-    glp_set_row_name(lp, i + 1, ("counter_" + std::to_string(i)).c_str());
-    // Constraint: sum of button presses = target value
-    glp_set_row_bnds(lp, i + 1, GLP_FX, machine.target_joltage[i],
-                     machine.target_joltage[i]);
-  }
+  lp.add_rows(num_counters, "counter_", machine.target_joltage);
 
   // Add columns (variables) - one for each button
-  glp_add_cols(lp, num_buttons);
-  for (size_t i = 0; i < num_buttons; ++i) {
-    glp_set_col_name(lp, i + 1, ("button_" + std::to_string(i)).c_str());
-    glp_set_col_bnds(lp, i + 1, GLP_LO, 0.0, 0.0); // Lower bound: 0
-    glp_set_col_kind(lp, i + 1, GLP_IV);           // Integer variable
-    glp_set_obj_coef(lp, i + 1, 1.0);              // Objective coefficient: 1
-  }
+  lp.add_cols(num_buttons, "button_");
 
-  // Build constraint matrix
-  // Count total non-zero elements
-  size_t num_elements = 0;
-  for (const auto &button : machine.buttons) {
-    num_elements += button.size();
-  }
+  size_t num_elements = std::ranges::fold_left(
+      machine.buttons, size_t{0},
+      [](size_t sum, const auto &btn) { return sum + btn.size(); });
 
   // GLPK uses 1-based indexing
   std::vector<int> ia(num_elements + 1);
   std::vector<int> ja(num_elements + 1);
   std::vector<double> ar(num_elements + 1);
+
+  // Fill constraint matrix
+  // Each button affects certain counters by +1
+  // So for each button j and each counter i it affects, we set A[i][j] = 1
+  // Note: counters and buttons are 0-based in our structures, but GLPK is
+  // 1-based.
+  // clang-format off
+  // [.####.#.] (3,4,5,7) (2,4,5,6,7) (1,4,7) (1,3,4,7) (1,2,3,4,5,7) (7) (1,2,3,6) (0,1,3,6,7) {4,59,39,250,242,220,26,250}
+  // [1] = 4 + 1  [2] = 59 + 1 [3] = 39 + 1  ...
+  // [1] = 0 + 1  [2] = 1 + 1  [3] = 2 + 1   ...
+  // [1] = 1.0    [2] = 1.0    [3] = 1.0     ...
+  // clang-format on
 
   size_t idx = 1;
   for (size_t btn = 0; btn < num_buttons; ++btn) {
@@ -179,38 +198,37 @@ std::expected<size_t, bool> solveMachine(const Machine &machine) {
 int main(int argc, char *argv[]) {
   std::string input_file = (argc > 1) ? argv[1] : "../../Day10/input";
 
-  std::ifstream file(input_file);
-  if (!file.is_open()) {
-    std::println(stderr, "Error: Could not open file '{}'", input_file);
-    return 1;
+  namespace pc = puzzles::common;
+
+  auto result = pc::readFileByLine<size_t>(
+      input_file, [](std::string_view line, size_t &total) -> bool {
+        size_t machine_num = 0;
+
+        if (line.empty())
+          return true;
+
+        ++machine_num;
+
+        auto machine_result = parseMachine(line);
+        if (!machine_result) {
+          std::println(stderr, "Failed to parse machine {}", machine_num);
+          return false;
+        }
+
+        auto presses = solveMachine(*machine_result);
+        if (!presses) {
+          std::println(stderr, "No solution found for machine {}", machine_num);
+          return false;
+        }
+
+        std::println("Machine {} requires {} presses", machine_num, *presses);
+        total += *presses;
+        return true;
+      });
+  if (!result) {
+    std::println(stderr, pc::InputFileError);
   }
 
-  size_t total_presses = 0;
-  size_t machine_num = 0;
-  std::string line;
-
-  while (std::getline(file, line)) {
-    if (line.empty())
-      continue;
-
-    ++machine_num;
-
-    auto machine_result = parseMachine(line);
-    if (!machine_result) {
-      std::println(stderr, "Failed to parse machine {}", machine_num);
-      return 1;
-    }
-
-    auto presses = solveMachine(*machine_result);
-    if (!presses) {
-      std::println(stderr, "No solution found for machine {}", machine_num);
-      return 1;
-    }
-
-    std::println("Machine {} requires {} presses", machine_num, *presses);
-    total_presses += *presses;
-  }
-
-  std::println("Total button presses: {}", total_presses);
+  std::println("Total button presses: {}", *result);
   return 0;
 }

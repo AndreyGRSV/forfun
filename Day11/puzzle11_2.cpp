@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <iostream>
+#include <print>
 #include <sstream>
 #include <string>
 #include <unordered_map>
@@ -16,19 +17,6 @@
 #include "../common/common.h"
 
 using Count = unsigned __int128;
-
-static std::string to_dec(Count v) {
-  if (v == 0)
-    return "0";
-  std::string s;
-  while (v > 0) {
-    int d = static_cast<int>(v % 10);
-    s.push_back(char('0' + d));
-    v /= 10;
-  }
-  std::reverse(s.begin(), s.end());
-  return s;
-}
 
 // mask bits: bit0 = saw_dac, bit1 = saw_fft
 Count dfs_masked(
@@ -96,7 +84,7 @@ int main(int argc, char **argv) {
       });
 
   if (!res) {
-    std::cerr << "Failed to open input: " << input_path << '\n';
+    std::println(stderr, puzzles::common::InputFileError);
     return 2;
   }
 
@@ -112,6 +100,6 @@ int main(int argc, char **argv) {
 
   Count answer = dfs_masked("svr", g, 0, onpath, memo);
 
-  std::cout << to_dec(answer) << '\n';
+  std::println("{}", answer);
   return 0;
 }

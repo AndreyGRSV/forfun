@@ -189,7 +189,8 @@ size_t solveMachine(const Machine &machine) {
 int main(int argc, char *argv[]) {
   std::string input_file = (argc > 1) ? argv[1] : "../Day 10/input";
 
-  auto result = puzzles::common::readFileByLine<size_t>(
+  namespace pc = puzzles::common;
+  auto result = pc::readFileByLine<size_t>(
       input_file, [](std::string_view line, size_t &total) -> bool {
         if (line.empty())
           return true;
@@ -213,7 +214,7 @@ int main(int argc, char *argv[]) {
   if (result) {
     std::println("Total button presses: {}", *result);
   } else {
-    std::println(stderr, "Failed to process input");
+    std::println(stderr, pc::InputFileError);
     return 1;
   }
 

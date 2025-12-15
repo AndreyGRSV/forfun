@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <iostream>
+#include <print>
 #include <sstream>
 #include <stack>
 #include <string>
@@ -17,19 +18,6 @@
 #include "../common/common.h"
 
 using Count = unsigned __int128;
-
-static std::string to_dec(Count v) {
-  if (v == 0)
-    return "0";
-  std::string s;
-  while (v > 0) {
-    int d = static_cast<int>(v % 10);
-    s.push_back(char('0' + d));
-    v /= 10;
-  }
-  std::reverse(s.begin(), s.end());
-  return s;
-}
 
 // Optimized recursive DFS with local cycle tracking
 Count dfs_count(
@@ -60,10 +48,12 @@ Count dfs_count(
 
 int main(int argc, char **argv) {
   std::filesystem::path input_path =
-      (argc > 1) ? argv[1] : std::filesystem::path("../Day 11/input");
+      (argc > 1) ? argv[1] : std::filesystem::path("../Day11/input");
+
+  namespace pc = puzzles::common;
 
   using Graph = std::unordered_map<std::string, std::vector<std::string>>;
-  auto res = puzzles::common::readFileByLine<Graph>(
+  auto res = pc::readFileByLine<Graph>(
       input_path, [](std::string_view line, Graph &g) -> bool {
         // skip empty lines
         std::string_view s = line;
@@ -87,7 +77,7 @@ int main(int argc, char **argv) {
       });
 
   if (!res) {
-    std::cerr << "Failed to open input: " << input_path << '\n';
+    std::println(stderr, pc::InputFileError);
     return 2;
   }
 
@@ -96,6 +86,6 @@ int main(int argc, char **argv) {
   std::unordered_set<std::string> visiting;
   Count answer = dfs_count("you", g, memo, visiting);
 
-  std::cout << to_dec(answer) << '\n';
+  std::println("{}", answer);
   return 0;
 }
