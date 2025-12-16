@@ -126,6 +126,12 @@ int main(int argc, char *argv[]) {
 
   int64_t max_area = 0;
 
+  const int AREA = 0;
+  const int MIN_X = 1;
+  const int MAX_X = 2;
+  const int MIN_Y = 3;
+  const int MAX_Y = 4;
+  // area, min_x,max_x,min_y,max_y
   std::vector<std::tuple<int64_t, int64_t, int64_t, int64_t, int64_t>> areas{};
 
   // Generate all possible rectangles defined by pairs of red tiles
@@ -153,19 +159,19 @@ int main(int argc, char *argv[]) {
   }
 
   std::sort(areas.rbegin(), areas.rend(), [](const auto &a, const auto &b) {
-    return std::get<0>(a) < std::get<0>(b);
+    return std::get<AREA>(a) < std::get<AREA>(b);
   });
 
   int drop = START_POSITION; // Skip first N areas already checked
   int area_count = drop;
   for (const auto &area : areas | std::views::drop(drop)) {
     std::println("Trying area {} from {}: {}", area_count++, areas.size(),
-                 std::get<0>(area));
+                 std::get<AREA>(area));
     std::atomic<bool> all_valid{true};
-    const int64_t min_x = std::get<1>(area);
-    const int64_t max_x = std::get<2>(area);
-    const int64_t min_y = std::get<3>(area);
-    const int64_t max_y = std::get<4>(area);
+    const int64_t min_x = std::get<MIN_X>(area);
+    const int64_t max_x = std::get<MAX_X>(area);
+    const int64_t min_y = std::get<MIN_Y>(area);
+    const int64_t max_y = std::get<MAX_Y>(area);
 
 #pragma omp parallel for schedule(dynamic)
     for (int64_t x = min_x; x <= max_x; x++) {
@@ -177,7 +183,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (all_valid) {
-      max_area = std::get<0>(area);
+      max_area = std::get<AREA>(area);
       break;
     }
   }
