@@ -5,16 +5,15 @@
             "includePath": [
                 "${default}"
             ],
-            "intelliSenseMode": "linux-gcc-x64",
             "configurationProvider": "go2sh.cmake-integration",
-            "compilerPath": "clang++",
+            "compilerPath": "/usr/bin/clang++",
             "cStandard": "c11",
             "cppStandard": "c++26",
             "browse": {
                 "path": [
                     "${workspaceFolder}"
                 ],
-                "limitSymbolsToIncludedHeaders": true,
+                "limitSymbolsToIncludedHeaders": true
             },
             "defines": [],
             "compilerArgs": [
@@ -24,6 +23,26 @@
                 "-Wpedantic"
             ],
             "intelliSenseMode": "clang-x64"
+        },
+        {
+            "name": "Linux Clang/GCC C++26",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "compilerPath": "/usr/local/bin/g++-14.2.0",
+            "cStandard": "c11",
+            "cppStandard": "c++26",
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "defines": [],
+            "compilerArgs": [
+                "-std=c++26",
+                "-Wall",
+                "-Wextra",
+                "-Wpedantic"
+            ],
+            "intelliSenseMode": "linux-gcc-x64"
         }
     ],
     "version": 4
