@@ -17,7 +17,7 @@
 int main(int argc, char *argv[]) {
 
   const std::filesystem::path input_file =
-      (argc > 1) ? argv[1] : "../Day 6/input";
+      (argc > 1) ? argv[1] : "../Day6/input";
 
   using ResultType = std::vector<std::vector<int>>;
 

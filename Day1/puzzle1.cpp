@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
   namespace pc = puzzles::common;
 
   const std::filesystem::path input_file =
-      (argc > 1) ? argv[1] : "../Day 1/input";
+      (argc > 1) ? argv[1] : "../Day1/input";
 
   using ResultType = std::tuple<int, int>; // (zero crossings, total rotations)
 

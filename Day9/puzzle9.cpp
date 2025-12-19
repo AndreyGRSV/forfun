@@ -33,7 +33,7 @@ struct Point {
 
 int main(int argc, char *argv[]) {
   const std::filesystem::path input_file{(argc > 1) ? argv[1]
-                                                    : "../Days9/input"};
+                                                    : "../../Day9/input"};
 
   // Read red tile positions
   using ResultType = std::vector<Point>;

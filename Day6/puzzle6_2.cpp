@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
   using namespace std;
 
   const std::filesystem::path input_file =
-      (argc > 1) ? argv[1] : "../Day 6/input";
+      (argc > 1) ? argv[1] : "../Day6/input";
 
   auto result = puzzles::common::readFileByLine<std::vector<std::string>>(
       input_file,

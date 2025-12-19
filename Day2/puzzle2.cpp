@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
   namespace pc = puzzles::common;
 
   const std::filesystem::path input_file =
-      (argc > 1) ? argv[1] : "../Day 2/input";
+      (argc > 1) ? argv[1] : "../Day2/input";
 
   using ResultType = std::tuple<uint64_t, uint64_t>;
   auto result = pc::readFileByLine<ResultType>(

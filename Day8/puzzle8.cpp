@@ -106,7 +106,7 @@ double calculateDistance(const Point3D &a, const Point3D &b) {
 int main(int argc, char *argv[]) {
   namespace cp = puzzles::common;
   const std::filesystem::path input_file{(argc > 1) ? argv[1]
-                                                    : "../Day 8/input"};
+                                                    : "../Day8/input"};
   const int TARGET_CONNECTIONS = (argc > 2) ? std::stoi(argv[2]) : 1000;
 
   // Read junction box positions

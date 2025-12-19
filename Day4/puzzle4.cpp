@@ -19,7 +19,7 @@ constexpr auto CalculationError = "Error calculating accessible rolls.";
 int main(int argc, char *argv[]) {
   namespace pc = puzzles::common;
   const std::filesystem::path input_file =
-      (argc > 1) ? argv[1] : "../Day 4/input";
+      (argc > 1) ? argv[1] : "../Day4/input";
 
   auto result = pc::readFileByLine<std::vector<std::string>>(
       input_file,

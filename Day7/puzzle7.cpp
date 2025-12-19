@@ -30,7 +30,7 @@ struct Beam {
 
 int main(int argc, char *argv[]) {
   const std::filesystem::path input_file =
-      (argc > 1) ? argv[1] : "../Day 7/input";
+      (argc > 1) ? argv[1] : "../Day7/input";
 
   // Read the grid
   using ResultType = std::vector<std::string>;

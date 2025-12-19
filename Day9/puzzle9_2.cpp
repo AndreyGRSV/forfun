@@ -40,34 +40,6 @@ struct Point {
 
 // Check if a point is inside the polygon using ray casting algorithm
 bool isInsidePolygon(const Point &p, const std::vector<Point> &polygon) {
-  int n = (int)polygon.size();
-  bool inside = false;
-
-  for (int i = 0, j = n - 1; i < n; j = i++) {
-    const auto &pi = polygon[i];
-    const auto &pj = polygon[j];
-    int64_t yi = pi.y, yj = pj.y;
-
-    // check if edge crosses horizontal ray at p.y
-    if ((yi > p.y) != (yj > p.y)) {
-      int64_t dy = yj - yi; // non-zero
-      int64_t dx = pj.x - pi.x;
-
-      // val = (pi.x - p.x) * dy + dx * (p.y - pi.y)
-      // original condition p.x < pi.x + dx*(p.y-pi.y)/dy
-      // becomes val*dy > 0 (handles sign of dy)
-      __int128 val = (__int128)(pi.x - p.x) * (__int128)dy +
-                     (__int128)dx * (__int128)(p.y - pi.y);
-      if (val * (__int128)dy > 0)
-        inside = !inside;
-    }
-  }
-
-  return inside;
-}
-
-// Check if a point is inside the polygon using ray casting algorithm
-bool isInsidePolygon1(const Point &p, const std::vector<Point> &polygon) {
   int n = polygon.size();
   bool inside = false;
 

@@ -100,7 +100,7 @@ auto countFreshIngredients(const std::vector<Range> &ranges) -> uint64_t {
 
 int main(int argc, char *argv[]) {
   const std::filesystem::path input_file =
-      (argc > 1) ? argv[1] : "../Day 5/input";
+      (argc > 1) ? argv[1] : "../Day5/input";
 
   using RangesType = std::vector<Range>;
   using IDsType = std::vector<uint64_t>;
